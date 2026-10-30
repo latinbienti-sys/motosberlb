@@ -8,93 +8,188 @@
 </head>
 <body>
     <div class="dashboard">
-        <!-- Navbar -->
         <nav class="navbar">
             <div class="navbar-brand">Dashboard Bera</div>
             <div class="navbar-tabs">
-                <a href="#" class="tab active" data-tab="home">Home</a>
-                <a href="#" class="tab" data-tab="bera">Motos Bera</a>
-                <a href="#" class="tab" data-tab="settings">Settings</a>
+                <a href="#" class="tab active" data-tab="ventas">Ventas</a>
+                <a href="#" class="tab" data-tab="proveedor">Pago a Proveedor</a>
+                <a href="#" class="tab" data-tab="condiciones">Condiciones</a>
             </div>
         </nav>
 
-        <!-- Main Content -->
         <div class="container">
-            <!-- Home Tab Content -->
-            <div id="home" class="tab-content active">
-                <h2>Bienvenido</h2>
-                <p>Dashboard de Bera</p>
-                <p>Selecciona la pestaña "Motos Bera" para ver los datos.</p>
-            </div>
-
-            <!-- Motos Bera Tab Content -->
-            <div id="bera" class="tab-content">
-                <h2>Motos Bera</h2>
-                <p>Esta pestaña muestra los datos específicos de Bera.</p>
+            <!-- Módulo de Ventas -->
+            <div id="ventas" class="tab-content active">
+                <h2>Ventas</h2>
                 <div class="container-box">
-                    <h3>KPIs Principales</h3>
-                    <div class="kpi-grid">
-                        <div class="kpi-card">
-                            <h3>Total</h3>
-                            <p class="kpi-value" id="kpi-total">0</p>
+                    <h3>Nueva venta</h3>
+                    <form id="form-venta" class="form-grid">
+                        <div class="form-group">
+                            <label for="v-proveedor">Proveedor</label>
+                            <select id="v-proveedor" class="form-control"></select>
                         </div>
-                        <div class="kpi-card">
-                            <h3>Pagado</h3>
-                            <p class="kpi-value" id="kpi-pagado">0</p>
+                        <div class="form-group">
+                            <label for="v-modelo">Modelo</label>
+                            <select id="v-modelo" class="form-control"></select>
                         </div>
-                        <div class="kpi-card">
-                            <h3>Por Cobrar</h3>
-                            <p class="kpi-value" id="kpi-pendiente">0</p>
+                        <div class="form-group">
+                            <label for="v-fecha">Fecha de venta</label>
+                            <input type="date" id="v-fecha" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="v-ciclo">Ciclo del cliente</label>
+                            <select id="v-ciclo" class="form-control"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="v-cliente">Cliente</label>
+                            <input type="text" id="v-cliente" class="form-control" placeholder="Nombre del cliente">
+                        </div>
+                        <div class="form-group">
+                            <label for="v-costo">Costo proveedor ($)</label>
+                            <input type="number" id="v-costo" class="form-control" min="0" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="v-precio">Precio venta cliente ($)</label>
+                            <input type="number" id="v-precio" class="form-control" min="0" step="0.01" required>
+                        </div>
+                    </form>
+                    <div id="v-condicion" class="condicion-box"></div>
+                    <div class="cronogramas">
+                        <div>
+                            <h4>Cronograma cliente</h4>
+                            <div id="v-crono-cliente"></div>
+                        </div>
+                        <div>
+                            <h4>Cronograma pago a proveedor</h4>
+                            <div id="v-crono-proveedor"></div>
                         </div>
                     </div>
+                    <button type="submit" form="form-venta" class="btn-apply">Registrar venta</button>
                 </div>
-                
+
                 <div class="container-box">
-                    <h3>Detalle de Transacciones</h3>
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Fecha</th>
-                                <th>Concepto</th>
-                                <th>Monto</th>
-                                <th>Estado</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>--</td>
-                                <td>--</td>
-                                <td>--</td>
-                                <td>--</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <h3>Ventas registradas</h3>
+                    <div class="table-wrap">
+                        <table class="data-table">
+                            <thead>
+                                <tr><th>Fecha</th><th>Cliente</th><th>Modelo</th><th>Condición</th><th>Ciclo</th><th class="num">Precio</th><th class="num">Costo</th><th></th></tr>
+                            </thead>
+                            <tbody id="tabla-ventas"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
-            <!-- Settings Tab Content -->
-            <div id="settings" class="tab-content">
-                <h2>Configuración</h2>
-                <p>Configura los parámetros del dashboard de Bera.</p>
-                <form class="settings-form">
-                    <div class="form-group">
-                        <label>Rango de Fechas</label>
-                        <input type="date" class="form-control">
-                    </div>
-                    <div class="form-group">
-                        <label>Tipo de Operación</label>
-                        <select class="form-control">
-                            <option value="all">Todas</option>
-                            <option value="pago">Pagos</option>
-                            <option value="venta">Ventas</option>
+            <!-- Módulo de Pago a Proveedor -->
+            <div id="proveedor" class="tab-content">
+                <h2>Pago a Proveedor</h2>
+                <div class="kpi-grid">
+                    <div class="kpi-card"><h3>Total comprometido</h3><p class="kpi-value" id="kpi-total">$0</p></div>
+                    <div class="kpi-card"><h3>Pagado</h3><p class="kpi-value" id="kpi-pagado">$0</p></div>
+                    <div class="kpi-card"><h3>Pendiente</h3><p class="kpi-value" id="kpi-pendiente">$0</p></div>
+                    <div class="kpi-card"><h3>Próximos 15 días</h3><p class="kpi-value" id="kpi-proximos">$0</p></div>
+                </div>
+                <div class="container-box">
+                    <div class="toolbar">
+                        <h3>Calendario de pagos</h3>
+                        <select id="p-filtro-proveedor" class="form-control"></select>
+                        <select id="p-filtro-estado" class="form-control">
+                            <option value="pendiente">Pendientes</option>
+                            <option value="pagado">Pagados</option>
+                            <option value="todos">Todos</option>
                         </select>
                     </div>
-                    <button type="submit" class="btn-apply">Aplicar</button>
-                </form>
+                    <div class="table-wrap">
+                        <table class="data-table">
+                            <thead>
+                                <tr><th>Fecha pago</th><th>Proveedor</th><th>Modelo</th><th>Cliente</th><th>Concepto</th><th class="num">Monto</th><th>Estado</th></tr>
+                            </thead>
+                            <tbody id="tabla-pagos"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Condiciones -->
+            <div id="condiciones" class="tab-content">
+                <h2>Condiciones de pago</h2>
+                <p class="muted">Cada venta guarda la condición vigente al momento de registrarse. Si cambias una condición aquí, solo aplica a las ventas nuevas desde la fecha de vigencia.</p>
+
+                <div class="container-box">
+                    <h3>Ciclos</h3>
+                    <div class="table-wrap">
+                        <table class="data-table">
+                            <thead><tr><th>Ciclo</th><th>Cliente paga</th><th>Se paga al proveedor</th></tr></thead>
+                            <tbody id="tabla-ciclos"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="container-box">
+                    <div class="toolbar">
+                        <h3>Proveedor</h3>
+                        <select id="c-proveedor" class="form-control"></select>
+                    </div>
+                    <h4>Planes</h4>
+                    <div class="table-wrap">
+                        <table class="data-table">
+                            <thead><tr><th>Plan</th><th class="num">Inicial %</th><th class="num">Cuotas</th><th>Frecuencia</th><th>Nota</th></tr></thead>
+                            <tbody id="tabla-planes"></tbody>
+                        </table>
+                    </div>
+                    <h4>Modelos y condición vigente (hoy)</h4>
+                    <div class="table-wrap">
+                        <table class="data-table">
+                            <thead><tr><th>Modelo</th><th>Plan</th><th class="num">Inicial %</th><th class="num">Cuotas</th><th>Vigente desde</th><th class="num">Costo $</th><th class="num">Precio venta $</th></tr></thead>
+                            <tbody id="tabla-modelos"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="container-box">
+                    <h3>Cambiar condición de un modelo</h3>
+                    <p class="muted">Ej.: León pasa a 8 cuotas con 40% de inicial desde el 01/11. Deja los campos en blanco para usar los valores del plan.</p>
+                    <form id="form-asignacion" class="form-grid">
+                        <div class="form-group">
+                            <label for="a-modelo">Modelo</label>
+                            <select id="a-modelo" class="form-control"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="a-plan">Plan</label>
+                            <select id="a-plan" class="form-control"></select>
+                        </div>
+                        <div class="form-group">
+                            <label for="a-desde">Vigente desde</label>
+                            <input type="date" id="a-desde" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="a-inicial">Inicial % (opcional)</label>
+                            <input type="number" id="a-inicial" class="form-control" min="0" max="100" step="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="a-cuotas">Cuotas (opcional)</label>
+                            <input type="number" id="a-cuotas" class="form-control" min="0" step="1">
+                        </div>
+                        <div class="form-group form-end">
+                            <button type="submit" class="btn-apply">Guardar condición</button>
+                        </div>
+                    </form>
+                    <h4>Historial de asignaciones</h4>
+                    <div class="table-wrap">
+                        <table class="data-table">
+                            <thead><tr><th>Modelo</th><th>Plan</th><th>Desde</th><th>Override</th></tr></thead>
+                            <tbody id="tabla-historial"></tbody>
+                        </table>
+                    </div>
+                    <button type="button" id="btn-reset" class="btn-secondary">Restaurar configuración inicial</button>
+                </div>
             </div>
         </div>
     </div>
 
+    <script src="js/config.js"></script>
+    <script src="js/condiciones.js"></script>
+    <script src="js/datasource.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
